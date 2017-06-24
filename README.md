@@ -18,19 +18,15 @@ https://www.python.org/ftp/python/3.5.3/python-3.5.3-amd64.exe
 
 Unticked all settings except pip. Install to C:\python35
 
-## Install pyinstaller
+## Install dependencies
 
-    wine ~/.wine/drive_c/python35/Scripts/pip.exe install pyinstaller
+    wine ~/.wine/drive_c/python35/Scripts/pip.exe install -r requirements.txt
 
-
-
-# Using pyinstaller
-
-## Building
+# Building
 
     wine ~/.wine/drive_c/python35/Scripts/pyinstaller.exe --onefile hello_world.py
 
-## Running
+# Running
 
     wine ./dist/hello_world.exe
 
