@@ -13,6 +13,7 @@
 
 """ScriptedQAForms"""
 
+import sys
 import os
 import socket
 import webbrowser
@@ -32,12 +33,29 @@ class Root(tornado.web.RequestHandler):
 
         self.render("index.html")
 
- 
+
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
+
+
 def main():
-    app = tornado.web.Application([
-            ('/', Root)],
-        template_path=os.path.join(os.path.dirname(__file__), "templates")
-    )
+    settings = {
+        'debug': True,
+        'template_path': resource_path("static"),
+        'static_url_prefix': "/angular/",
+        'static_path': resource_path("static")}
+    
+    handlers = [
+        ('/', Root)]
+    
+    app = tornado.web.Application(handlers, **settings)
     
     try:
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)

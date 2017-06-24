@@ -24,7 +24,7 @@ Unticked all settings except pip. Install to C:\python35
 
 # Building
 
-    wine ~/.wine/drive_c/python35/Scripts/pyinstaller.exe --onefile hello_world.py
+    wine ~/.wine/drive_c/python35/Scripts/pyinstaller.exe --onefile python-server/hello_world.spec
 
 # Running
 
