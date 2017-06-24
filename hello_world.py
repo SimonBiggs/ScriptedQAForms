@@ -14,13 +14,11 @@
 """ScriptedQAForms"""
 
 import os
+import socket
 import webbrowser
 
 import tornado.ioloop
 import tornado.web
-
-
-
 
 class Root(tornado.web.RequestHandler):
     """ROOT"""
@@ -40,12 +38,25 @@ def main():
             ('/', Root)],
         template_path=os.path.join(os.path.dirname(__file__), "templates")
     )
-
+    
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(('8.8.8.8', 1))
+        hostname = s.getsockname()[0]
+    except:
+        hostname = 'localhost'
+        
+    
     port = int(os.environ.get("PORT", 5000))
+    
+    while True:
+        try:
+            app.listen(port)
+            break
+        except:
+            port += 1
 
-    app.listen(port)
-
-    webbrowser.open('http://localhost:{}'.format(port))
+    webbrowser.open('http://{}:{}'.format(hostname, port))
     tornado.ioloop.IOLoop.current().start()
 
 
