@@ -21,6 +21,19 @@ import webbrowser
 import tornado.ioloop
 import tornado.web
 
+class PythonAPIv1(tornado.web.RequestHandler):
+    """PythonAPI"""
+
+    def set_default_headers(self):
+        self.set_header("Access-Control-Allow-Origin", "*")
+        self.set_header('Access-Control-Allow-Methods', 'GET')
+
+    def get(self):
+        """PythonAPI"""
+
+        self.write("hello_python")
+
+
 class Angular(tornado.web.RequestHandler):
     """Angular"""
 
@@ -49,11 +62,12 @@ def main():
     settings = {
         'debug': True,
         'template_path': resource_path("angular"),
-        'static_url_prefix': "/angular/",
+        'static_url_prefix': "/static/",
         'static_path': resource_path("angular")}
     
     handlers = [
-        ('/', Angular)]
+        ('/api/v1/.*', PythonAPIv1),
+        ('/.*', Angular)]
     
     app = tornado.web.Application(handlers, **settings)
     

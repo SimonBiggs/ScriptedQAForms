@@ -1,6 +1,6 @@
-# AngularFrontend
+# ElectroninsertsStaging
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.1.3.
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.0.6.
 
 ## Development server
 

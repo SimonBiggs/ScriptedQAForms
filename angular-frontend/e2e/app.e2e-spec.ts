@@ -1,14 +1,14 @@
-import { AngularFrontendPage } from './app.po';
+import { ElectroninsertsStagingPage } from './app.po';
 
-describe('angular-frontend App', () => {
-  let page: AngularFrontendPage;
+describe('electroninserts-staging App', () => {
+  let page: ElectroninsertsStagingPage;
 
   beforeEach(() => {
-    page = new AngularFrontendPage();
+    page = new ElectroninsertsStagingPage();
   });
 
-  it('should display welcome message', () => {
+  it('should display message saying app works', () => {
     page.navigateTo();
-    expect(page.getParagraphText()).toEqual('Welcome to app!!');
+    expect(page.getParagraphText()).toEqual('app works!');
   });
 });

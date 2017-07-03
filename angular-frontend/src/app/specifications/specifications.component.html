@@ -1,0 +1,196 @@
+
+<h2>Description</h2>
+<p>
+  Use this component to define your centre's machine specifications. 
+  Aim to keep the definitions here in agreement with your planning system, that way DICOM exports will
+  align to the correct model.
+</p>
+<p>
+  These machine specifications will be used throughout this web app to silo each electron insert factor 
+  model into its own specific machine ID, applicator, energy, ssd combination.
+</p>
+<p>
+  Begin by entering your machine ID as defined within your treatment planning system along with the machine's make and model. 
+  Note that these specifications are stored and accessed only on your local machine.
+  They are not sent to the server.
+</p>
+<p>
+  <font color="#d3d3d3">
+    Currently specifcations can only be added. At this current time they cannot be edited nor deleted once they have been defined.
+  </font>
+</p>
+
+
+<div *ngIf="machineSpecificationService != null && currentSettings != null">
+
+  <md-card class="mat-elevation-z4">
+    <md-card-header>
+      <md-card-title><h3>Machine IDs</h3></md-card-title>
+      <md-card-subtitle>A unique ID for each machine model. 
+        Should match the respective Machine IDs that your TPS DICOM exports to.</md-card-subtitle>
+    </md-card-header>
+    <md-divider></md-divider>
+    <md-card-content>
+      <md-list>
+        <md-list-item *ngFor="let machine of machineSpecificationService.machineList">
+          <h3 md-line>{{machine}}</h3>
+          <p md-line>{{machineSpecificationService.returnMachineSpecification(machine).makeAndModel}}</p>
+          <button 
+            md-mini-fab
+            [disabled]="machine==currentSettings.machine"
+            (click)="machineSpecificationService.changeMachine(machine)">
+            <md-icon>dashboard</md-icon>
+          </button>
+        </md-list-item>
+      </md-list>
+      <md-divider></md-divider>
+      <md-list>
+        <md-list-item>
+          <h4>Add a new Machine ID:</h4>
+        </md-list-item>
+        <md-list-item>
+          <md-input-container class="full-width">
+            <input 
+              mdInput placeholder="Machine ID"
+              [(ngModel)]="newMachineID"
+              (input)="checkNewMachineIDInput()">
+          </md-input-container>
+        </md-list-item>
+        <md-list-item>
+          <md-input-container class="full-width">
+            <input 
+              mdInput placeholder="(Optional) Make and Model"
+              [(ngModel)]="newModel">
+          </md-input-container>
+          <button 
+            md-fab
+            [disabled]="!newMachineIDValid"
+            angulartics2On="click" angularticsEvent="Specifications | Button click | Add machine ID"
+            (click)="addMachineID()"><md-icon>add</md-icon></button>
+        </md-list-item>
+      </md-list>
+    </md-card-content>
+  </md-card>
+
+  <p></p>
+
+  <div *ngIf="machineSpecificationService.currentSpecification != null">
+    <md-card class="mat-elevation-z4">
+      <md-card-header>
+        <md-card-title><h3>Electron energies for Machine ID {{currentSettings.machine}}</h3></md-card-title>
+        <md-card-subtitle>The nominal energies defined to match your TPS DICOM export.</md-card-subtitle>
+      </md-card-header>
+      <md-divider></md-divider>
+      <md-card-content>
+        <md-list>
+          <md-list-item *ngFor="let energy of machineSpecificationService.currentSpecification.energy">
+            <p md-line>{{energy}} MeV</p>
+            <p md-line>R<sub>50</sub>: {{machineSpecificationService.returnCurrentR50(energy)}} cm</p>
+          </md-list-item>
+        </md-list>
+        <md-divider></md-divider>
+        <md-list>
+          <md-list-item>
+            <h4>Add a new energy:</h4>
+          </md-list-item>
+          <md-list-item>
+            <md-input-container class="full-width">
+              <input 
+                type="number"
+                mdInput placeholder="Energy (MeV)"
+                [(ngModel)]="newEnergy"
+                (input)="checkNewEnergyInput()">
+            </md-input-container>
+          </md-list-item>
+          <md-list-item>
+            <md-input-container class="full-width">
+              <input 
+                type="number"
+                mdInput placeholder="(Optional) R50 (cm)"
+                [(ngModel)]="newR50">
+            </md-input-container>
+            <button 
+              md-fab
+              [disabled]="!newEnergyValid"
+              angulartics2On="click" angularticsEvent="Specifications | Button click | Add energy"
+              (click)="addEnergy()"><md-icon>add</md-icon></button>
+          </md-list-item>
+        </md-list>
+      </md-card-content>
+    </md-card>
+
+    <p></p>
+
+    <md-card class="mat-elevation-z4">
+      <md-card-header>
+        <md-card-title><h3>Applicator names for Machine ID {{currentSettings.machine}}</h3></md-card-title>
+        <md-card-subtitle>The nominal applicator names defined to match your TPS DICOM export.</md-card-subtitle>
+      </md-card-header>
+      <md-divider></md-divider>
+      <md-card-content>
+        <md-list>
+          <md-list-item *ngFor="let applicator of machineSpecificationService.currentSpecification.applicator">
+            <p md-line>{{applicator}}</p>
+          </md-list-item>
+        </md-list>
+        <md-divider></md-divider>
+        <md-list>
+          <md-list-item>
+            <h4>Add a new applicator:</h4>
+          </md-list-item>
+          <md-list-item>
+            <md-input-container class="full-width">
+              <input 
+                mdInput placeholder="Applicator Name"
+                [(ngModel)]="newApplicator"
+                (input)="checkNewApplicatorInput()">
+            </md-input-container>
+            <button 
+              md-fab
+              [disabled]="!newApplicatorValid"
+              angularticsEvent="Specifications | Button click | Add applicator"
+              (click)="addApplicator()"><md-icon>add</md-icon></button>
+          </md-list-item>
+        </md-list>
+      </md-card-content>
+    </md-card>
+
+    <p></p>
+
+    <md-card class="mat-elevation-z4">
+      <md-card-header>
+        <md-card-title><h3>Available SSDs for Machine ID {{currentSettings.machine}}</h3></md-card-title>
+        <md-card-subtitle>The SSDs that are used in planning.</md-card-subtitle>
+      </md-card-header>
+      <md-divider></md-divider>
+      <md-card-content>
+        <md-list>
+          <md-list-item *ngFor="let ssd of this.machineSpecificationService.currentSpecification.ssd">
+            <p md-line>{{ssd}} cm</p>
+          </md-list-item>
+        </md-list>
+        <md-divider></md-divider>
+        <md-list>
+          <md-list-item>
+            <h4>Add a new SSD:</h4>
+          </md-list-item>
+          <md-list-item>
+            <md-input-container class="full-width">
+              <input 
+                type="number"
+                mdInput placeholder="SSD (cm)"
+                [(ngModel)]="newSSD"
+                (input)="checkNewSSDInput()">
+            </md-input-container>
+            <button 
+              md-fab
+              [disabled]="!newSSDValid"
+              angularticsEvent="Specifications | Button click | Add SSD"
+              (click)="addSSD()"><md-icon>add</md-icon></button>
+          </md-list-item>
+        </md-list>
+      </md-card-content>
+    </md-card>
+
+  </div>
+</div>

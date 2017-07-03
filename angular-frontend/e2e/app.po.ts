@@ -1,6 +1,6 @@
 import { browser, by, element } from 'protractor';
 
-export class AngularFrontendPage {
+export class ElectroninsertsStagingPage {
   navigateTo() {
     return browser.get('/');
   }
