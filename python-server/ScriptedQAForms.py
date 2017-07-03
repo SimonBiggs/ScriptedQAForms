@@ -59,8 +59,16 @@ def resource_path(relative_path):
 
 
 def main():
+    
+    dev_mode_string = os.getenv('DEVMODE')
+    
+    if dev_mode_string == "True":
+        dev_mode = True
+    else:
+        dev_mode = False       
+    
     settings = {
-        'debug': True,
+        'debug': dev_mode,
         'template_path': resource_path("angular"),
         'static_url_prefix': "/static/",
         'static_path': resource_path("angular")}
@@ -87,8 +95,12 @@ def main():
             break
         except:
             port += 1
+    
+    if dev_mode:
+        print("Tornado DevMode Active on port: {}".format(port))
+    else:
+        webbrowser.open('http://{}:{}'.format(hostname, port))
 
-    webbrowser.open('http://{}:{}'.format(hostname, port))
     tornado.ioloop.IOLoop.current().start()
 
 
