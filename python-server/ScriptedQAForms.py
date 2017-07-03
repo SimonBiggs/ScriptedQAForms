@@ -21,15 +21,15 @@ import webbrowser
 import tornado.ioloop
 import tornado.web
 
-class Root(tornado.web.RequestHandler):
-    """ROOT"""
+class Angular(tornado.web.RequestHandler):
+    """Angular"""
 
     def set_default_headers(self):
         self.set_header("Access-Control-Allow-Origin", "*")
         self.set_header('Access-Control-Allow-Methods', 'GET')
 
     def get(self):
-        """ROOT"""
+        """Angular"""
 
         self.render("index.html")
 
@@ -48,12 +48,12 @@ def resource_path(relative_path):
 def main():
     settings = {
         'debug': True,
-        'template_path': resource_path("static"),
+        'template_path': resource_path("angular"),
         'static_url_prefix': "/angular/",
-        'static_path': resource_path("static")}
+        'static_path': resource_path("angular")}
     
     handlers = [
-        ('/', Root)]
+        ('/', Angular)]
     
     app = tornado.web.Application(handlers, **settings)
     
@@ -62,7 +62,7 @@ def main():
         s.connect(('8.8.8.8', 1))
         hostname = s.getsockname()[0]
     except:
-        hostname = 'localhost'
+        hostname = socket.gethostbyname(socket.gethostname())
         
     
     port = int(os.environ.get("PORT", 5000))
