@@ -2,5 +2,5 @@
 
 cd angular-frontend
 yarn install
-ng build --prod
+ng build --no-aot --prod
 cd ../
