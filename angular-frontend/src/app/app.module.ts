@@ -11,33 +11,26 @@ import { RoutingModule } from './app.routing'
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
-import { FurtherDetailsComponent } from './further-details/further-details.component';
-import { DatabaseManagementComponent } from './database-management/database-management.component';
-import { SpecificationsComponent } from './specifications/specifications.component';
-import { DicomComponent } from './dicom/dicom.component';
-import { ParameteriseComponent } from './parameterise/parameterise.component';
-import { CreateModelComponent } from './create-model/create-model.component';
-import { UseModelComponent } from './use-model/use-model.component';
+
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 import { TitleService } from './title.service';
-import { DataPersistenceService } from './data-persistence.service';
-import { MachineSpecificationService } from './machine-specification.service';
-import { CurrentSettingsService } from './current-settings.service';
-import { AreaLengthConversionService } from './area-length-conversion.service';
+import { ViewComponent } from './view/view.component';
+import { TrendComponent } from './trend/trend.component';
+import { EditComponent } from './edit/edit.component';
+import { RecordComponent } from './record/record.component';
+import { ShareComponent } from './share/share.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    FurtherDetailsComponent,
-    DatabaseManagementComponent,
-    SpecificationsComponent,
-    DicomComponent,
-    ParameteriseComponent,
-    CreateModelComponent,
-    UseModelComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    ViewComponent,
+    TrendComponent,
+    EditComponent,
+    RecordComponent,
+    ShareComponent
   ],
   imports: [
     BrowserModule,
@@ -49,11 +42,7 @@ import { AreaLengthConversionService } from './area-length-conversion.service';
     FlexLayoutModule
   ],
   providers: [
-    TitleService,
-    DataPersistenceService,
-    AreaLengthConversionService,
-    MachineSpecificationService,
-    CurrentSettingsService
+    TitleService
   ],
   bootstrap: [AppComponent]
 })

@@ -11,53 +11,63 @@
     <md-icon>home</md-icon>
   </a>
 
-  <a md-button routerLink="/details" routerLinkActive="active" href fxShow="false" fxShow.gt-sm>
-      DETAILS
-    </a>
+  <a md-button routerLink="/record" routerLinkActive="active" href fxShow="false" fxShow.gt-xs>
+      <md-icon class="toolbar-logo">note_add</md-icon>RECORD
+  </a>
 
-  <a md-button routerLink="/specifications" routerLinkActive="active" href fxShow="false" fxShow.gt-md>
-      SPECIFICATIONS
-    </a>
+  <a md-icon-button routerLink="/record" routerLinkActive="active" href fxShow="true" fxHide.gt-xs>
+    <md-icon>note_add</md-icon>
+  </a>
 
-  <a md-button routerLink="/dicom" routerLinkActive="active" href fxShow="false" fxShow.gt-xs>
-      DICOM
-    </a>
+  <a md-button routerLink="/view" routerLinkActive="active" href fxShow="false" fxShow.gt-xs>
+      <md-icon class="toolbar-logo">visibility</md-icon>VIEW
+  </a>
+  
+  <a md-icon-button routerLink="/view" routerLinkActive="active" href fxShow="true" fxHide.gt-xs>
+    <md-icon>visibility</md-icon>
+  </a>
 
-  <a md-button routerLink="/parameterise" routerLinkActive="active" href fxShow="false" fxShow.gt-sm>
-      PARAMETERISE
-    </a>
+  <a md-button routerLink="/edit" routerLinkActive="active" href fxShow="false" fxShow.gt-xs>
+      <md-icon class="toolbar-logo">edit</md-icon>EDIT
+  </a>
 
-  <a md-button routerLink="/create-model" routerLinkActive="active" href fxShow="false" fxShow.gt-md>
-      CREATE MODEL
-    </a>
+  <a md-icon-button routerLink="/edit" routerLinkActive="active" href fxShow="true" fxHide.gt-xs>
+    <md-icon>edit</md-icon>
+  </a>
 
-  <a md-button routerLink="/use-model" routerLinkActive="active" href fxShow="false" fxShow.gt-sm>
-      USE MODEL
-    </a>
+  <a md-button routerLink="/trend" routerLinkActive="active" href fxShow="false" fxShow.gt-xs>
+      <md-icon class="toolbar-logo">show_chart</md-icon>TREND
+  </a>
 
-  <a md-button routerLink="/database" routerLinkActive="active" href fxShow="false" fxShow.gt-md>
-      DATABASE
-    </a>
+  <a md-icon-button routerLink="/trend" routerLinkActive="active" href fxShow="true" fxHide.gt-xs>
+    <md-icon>show_chart</md-icon>
+  </a>
+
+
   <!--<span>{{title}}</span>-->
   <span class="fill-remaining-space"></span>
-  <a md-button fxShow="false" fxShow.gt-sm href="http://nbviewer.jupyter.org/github/SimonBiggs/electronfactor-server/blob/master/Electron%20REST%20API.ipynb"><img class="toolbar-logo" src="/assets/img/rest-api.svg"> API</a>
-  <a md-button href="https://github.com/SimonBiggs/electronfactor-server/blob/master/electroninserts.py"><img class="toolbar-logo" src="/assets/img/python.svg"> PYTHON</a>
-  <a md-button href="https://github.com/SimonBiggs/eletronfactor-server/blob/master/README.md"><img class="toolbar-logo" src="/assets/img/github-circle-white-transparent.svg"> GITHUB</a>
+  <a md-button routerLink="/share" routerLinkActive="active" href fxShow="false" fxShow.gt-sm>
+      <md-icon class="toolbar-logo">share</md-icon>SHARE
+    </a>
+  <!--Need to bundle source-->
+  <a md-button href="" fxShow="false" fxShow.gt-sm><img class="toolbar-logo" src="/assets/img/python.svg">SOURCE</a>
+  <a md-button href="https://github.com/SimonBiggs/ScriptedQAForms" fxShow="false" fxShow.gt-sm><img class="toolbar-logo" src="/assets/img/github-circle-white-transparent.svg">GITHUB</a>
 </md-toolbar>
 
 <md-sidenav-container #container>
 
   <md-sidenav #sidenav>
-    <h2>Electron Insert Factors</h2>
+    <h2>Scripted QA Forms</h2>
     <md-nav-list>
+      <md-divider></md-divider>
       <a md-list-item routerLink="/home" routerLinkActive="active" href (click)="container.scrollTop=0; sidenav.close(); ">Home</a>
-      <a md-list-item routerLink="/details" routerLinkActive="active" href (click)="sidenav.close()">Further details</a>
-      <a md-list-item routerLink="/specifications" routerLinkActive="active" href (click)="sidenav.close()">Machine specifications</a>
-      <a md-list-item routerLink="/dicom" routerLinkActive="active" href (click)="sidenav.close()">DICOM insert shape extraction</a>
-      <a md-list-item routerLink="/parameterise" routerLinkActive="active" href (click)="sidenav.close()">Parameterise insert shapes</a>
-      <a md-list-item routerLink="/create-model" routerLinkActive="active" href (click)="sidenav.close()">Create insert factor model</a>
-      <a md-list-item routerLink="/use-model" routerLinkActive="active" href (click)="sidenav.close()">Use insert factor model</a>
-      <a md-list-item routerLink="/database" routerLinkActive="active" href (click)="sidenav.close()">Database management</a>
+      <a md-list-item routerLink="/record" routerLinkActive="active" href (click)="sidenav.close()">Record results</a>
+      <a md-list-item routerLink="/view" routerLinkActive="active" href (click)="sidenav.close()">View written results</a>
+      <a md-list-item routerLink="/edit" routerLinkActive="active" href (click)="sidenav.close()">Create and edit forms</a>
+      <a md-list-item routerLink="/trend" routerLinkActive="active" href (click)="sidenav.close()">Show trends</a>
+      <md-divider></md-divider>
+      <a md-list-item routerLink="/share" routerLinkActive="active" href (click)="sidenav.close()">Share forms</a>
+      <md-divider></md-divider>
     </md-nav-list>
   </md-sidenav>
 
