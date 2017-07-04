@@ -17,6 +17,7 @@ import sys
 import os
 import socket
 import webbrowser
+import time
 
 import tornado.ioloop
 import tornado.web
@@ -105,16 +106,24 @@ def main():
     
     port = int(os.environ.get("PORT", 5000))
     
-    while True:
-        try:
-            app.listen(port)
-            break
-        except:
-            port += 1
+
     
     if dev_mode:
-        print("Tornado DevMode Active on port: {}".format(port))
+        while True:
+            try:
+                app.listen(port)
+                break
+            except:
+                print("Failed to start server at: http://{}:{}".format(hostname, port))
+                time.sleep(1)
+        print('Development server running at: http://{}:{}'.format(hostname, port))
     else:
+        while True:
+            try:
+                app.listen(port)
+                break
+            except:
+                port += 1
         webbrowser.open('http://{}:{}'.format(hostname, port))
 
     tornado.ioloop.IOLoop.current().start()
