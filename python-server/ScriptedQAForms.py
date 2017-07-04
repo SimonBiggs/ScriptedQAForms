@@ -47,7 +47,7 @@ class Angular(tornado.web.RequestHandler):
         self.render("index.html")
 
 
-def resource_path(relative_path):
+def static_directory():
     """ Get absolute path to resource, works for dev and for PyInstaller """
     try:
         # PyInstaller creates a temp folder and stores path in _MEIPASS
@@ -64,27 +64,32 @@ def main():
     if dev_mode_string == "True":
         dev_mode = True
     else:
-        dev_mode = False       
+        dev_mode = False
+        
+    if dev_mode:
+        static_directory = "./angular-frontend/dist"
+    else:
+        static_directory = os.path.join(sys._MEIPASS, 'angular')  
     
     settings = {
         'debug': dev_mode,
-        'template_path': resource_path("angular"),
-        'static_path': resource_path("angular")}
+        'template_path': static_directory,
+        'static_path': static_directory}
     
     handlers = [
         ('/api/v1/(.*)', PythonAPIv1),
         ('/assets/(.*)', tornado.web.StaticFileHandler, dict(
-            path=resource_path(os.path.join('angular', 'assets')))),
+            path=os.path.join(static_directory, 'assets'))),
         (r'/(styles.*\.bundle\.css)', tornado.web.StaticFileHandler, dict(
-            path=resource_path('angular'))),
+            path=static_directory)),
         (r'/(inline.*\.bundle\.js)', tornado.web.StaticFileHandler, dict(
-            path=resource_path('angular'))),
+            path=static_directory)),
         (r'/(vendor.*\.bundle\.js)', tornado.web.StaticFileHandler, dict(
-            path=resource_path('angular'))),
+            path=static_directory)),
         (r'/(polyfills.*\.bundle\.js)', tornado.web.StaticFileHandler, dict(
-            path=resource_path('angular'))),
+            path=static_directory)),
         (r'/(main.*\.bundle\.js)', tornado.web.StaticFileHandler, dict(
-            path=resource_path('angular'))),
+            path=static_directory)),
         ('/.*', Angular)
     ]
     

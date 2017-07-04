@@ -1,3 +1,3 @@
 import webbrowser
 
-webbrowser.open('http://localhost:4200')
+webbrowser.open('http://localhost:5000')
