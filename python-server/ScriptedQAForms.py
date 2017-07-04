@@ -28,10 +28,10 @@ class PythonAPIv1(tornado.web.RequestHandler):
         self.set_header("Access-Control-Allow-Origin", "*")
         self.set_header('Access-Control-Allow-Methods', 'GET')
 
-    def get(self):
+    def get(self, input_string):
         """PythonAPI"""
 
-        self.write("hello_python")
+        self.write("Hello {}".format(input_string))
 
 
 class Angular(tornado.web.RequestHandler):
@@ -59,7 +59,6 @@ def resource_path(relative_path):
 
 
 def main():
-    
     dev_mode_string = os.getenv('DEVMODE')
     
     if dev_mode_string == "True":
@@ -70,12 +69,24 @@ def main():
     settings = {
         'debug': dev_mode,
         'template_path': resource_path("angular"),
-        'static_url_prefix': "/static/",
         'static_path': resource_path("angular")}
     
     handlers = [
-        ('/api/v1/.*', PythonAPIv1),
-        ('/.*', Angular)]
+        ('/api/v1/(.*)', PythonAPIv1),
+        ('/assets/(.*)', tornado.web.StaticFileHandler, dict(
+            path=resource_path(os.path.join('angular', 'assets')))),
+        (r'/(styles.*\.bundle\.css)', tornado.web.StaticFileHandler, dict(
+            path=resource_path('angular'))),
+        (r'/(inline.*\.bundle\.js)', tornado.web.StaticFileHandler, dict(
+            path=resource_path('angular'))),
+        (r'/(vendor.*\.bundle\.js)', tornado.web.StaticFileHandler, dict(
+            path=resource_path('angular'))),
+        (r'/(polyfills.*\.bundle\.js)', tornado.web.StaticFileHandler, dict(
+            path=resource_path('angular'))),
+        (r'/(main.*\.bundle\.js)', tornado.web.StaticFileHandler, dict(
+            path=resource_path('angular'))),
+        ('/.*', Angular)
+    ]
     
     app = tornado.web.Application(handlers, **settings)
     
