@@ -48,15 +48,13 @@ class Angular(tornado.web.RequestHandler):
         self.render("index.html")
 
 
-def static_directory():
-    """ Get absolute path to resource, works for dev and for PyInstaller """
-    try:
-        # PyInstaller creates a temp folder and stores path in _MEIPASS
-        base_path = sys._MEIPASS
-    except Exception:
-        base_path = os.path.abspath(".")
+def get_free_port():
+    s = socket.socket()
+    s.bind(('', 0))
+    port = s.getsockname()[1]
+    s.close()
+    return port
 
-    return os.path.join(base_path, relative_path)
 
 
 def main():
@@ -127,6 +125,7 @@ def main():
         webbrowser.open('http://{}:{}'.format(hostname, port))
 
     tornado.ioloop.IOLoop.current().start()
+
 
 
 if __name__ == "__main__":

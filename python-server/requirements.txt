@@ -1,3 +1,4 @@
 pyinstaller
 tornado
 numpy
+jupyter_kernel_gateway
