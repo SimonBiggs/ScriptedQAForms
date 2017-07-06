@@ -11,122 +11,66 @@
 # License along with this program. If not, see
 # http://www.gnu.org/licenses/.
 
-"""ScriptedQAForms"""
+"""ScriptedForms"""
 
 import sys
 import os
-import socket
 import webbrowser
-import time
 
-import tornado.ioloop
 import tornado.web
+from traitlets import Unicode
 
-class PythonAPIv1(tornado.web.RequestHandler):
-    """PythonAPI"""
+from notebook.notebookapp import NotebookApp
+from notebook.base.handlers import IPythonHandler
 
-    def set_default_headers(self):
-        self.set_header("Access-Control-Allow-Origin", "*")
-        self.set_header('Access-Control-Allow-Methods', 'GET')
-
-    def get(self, input_string):
-        """PythonAPI"""
-
-        self.write("Hello {}".format(input_string))
-
-
-class Angular(tornado.web.RequestHandler):
+class Angular(IPythonHandler):
     """Angular"""
-
-    def set_default_headers(self):
-        self.set_header("Access-Control-Allow-Origin", "*")
-        self.set_header('Access-Control-Allow-Methods', 'GET')
-
     def get(self):
         """Angular"""
 
         self.render("index.html")
 
 
-def get_free_port():
-    s = socket.socket()
-    s.bind(('', 0))
-    port = s.getsockname()[1]
-    s.close()
-    return port
+class ScriptedForms(NotebookApp):
 
+    default_url = Unicode('/forms/')
 
-
-def main():
-    dev_mode_string = os.getenv('DEVMODE')
-    
-    if dev_mode_string == "True":
-        dev_mode = True
-    else:
-        dev_mode = False
+    def start(self):    
+        dev_mode_string = os.getenv('DEVMODE')
         
-    if dev_mode:
-        static_directory = "./angular-frontend/dist"
-    else:
-        static_directory = os.path.join(sys._MEIPASS, 'angular')  
-    
-    settings = {
-        'debug': dev_mode,
-        'template_path': static_directory,
-        'static_path': static_directory}
-    
-    handlers = [
-        ('/api/v1/(.*)', PythonAPIv1),
-        ('/assets/(.*)', tornado.web.StaticFileHandler, dict(
-            path=os.path.join(static_directory, 'assets'))),
-        (r'/(styles.*\.bundle\.css)', tornado.web.StaticFileHandler, dict(
-            path=static_directory)),
-        (r'/(inline.*\.bundle\.js)', tornado.web.StaticFileHandler, dict(
-            path=static_directory)),
-        (r'/(vendor.*\.bundle\.js)', tornado.web.StaticFileHandler, dict(
-            path=static_directory)),
-        (r'/(polyfills.*\.bundle\.js)', tornado.web.StaticFileHandler, dict(
-            path=static_directory)),
-        (r'/(main.*\.bundle\.js)', tornado.web.StaticFileHandler, dict(
-            path=static_directory)),
-        ('/.*', Angular)
-    ]
-    
-    app = tornado.web.Application(handlers, **settings)
-    
-    try:
-        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        s.connect(('8.8.8.8', 1))
-        hostname = s.getsockname()[0]
-    except:
-        hostname = socket.gethostbyname(socket.gethostname())
+        if dev_mode_string == "True":
+            dev_mode = True
+        else:
+            dev_mode = False
+            
+        if dev_mode:
+            static_directory = "./angular-frontend/dist"
+        else:
+            static_directory = os.path.join(sys._MEIPASS, 'angular')  
+       
+        handlers = [
+            ('/forms/assets/(.*)', tornado.web.StaticFileHandler, dict(
+                path=os.path.join(static_directory, 'assets'))),
+            (r'/forms/(styles.*\.bundle\.css)', tornado.web.StaticFileHandler, dict(
+                path=static_directory)),
+            (r'/forms/(inline.*\.bundle\.js)', tornado.web.StaticFileHandler, dict(
+                path=static_directory)),
+            (r'/forms/(vendor.*\.bundle\.js)', tornado.web.StaticFileHandler, dict(
+                path=static_directory)),
+            (r'/forms/(polyfills.*\.bundle\.js)', tornado.web.StaticFileHandler, dict(
+                path=static_directory)),
+            (r'/forms/(main.*\.bundle\.js)', tornado.web.StaticFileHandler, dict(
+                path=static_directory)),
+            ('/forms/.*', Angular)
+        ]
         
-    
-    port = int(os.environ.get("PORT", 5000))
-    
-
-    
-    if dev_mode:
-        while True:
-            try:
-                app.listen(port)
-                break
-            except:
-                print("Failed to start server at: http://{}:{}".format(hostname, port))
-                time.sleep(1)
-        print('Development server running at: http://{}:{}'.format(hostname, port))
-    else:
-        while True:
-            try:
-                app.listen(port)
-                break
-            except:
-                port += 1
-        webbrowser.open('http://{}:{}'.format(hostname, port))
-
-    tornado.ioloop.IOLoop.current().start()
-
+        self.web_app.add_handlers(".*$", handlers)
+        self.web_app.settings['debug'] = dev_mode
+        self.web_app.settings['template_path'] = static_directory
+        self.web_app.settings['static_path'] = static_directory
+        
+        super(ScriptedForms, self).start()
 
 
 if __name__ == "__main__":
-    main()
+    ScriptedForms.launch_instance()
