@@ -2,5 +2,5 @@
 
 cd angular-frontend
 yarn install
-ng build --no-aot --prod
+yarn run ng build -- --no-aot --prod --deploy-url /forms
 cd ../

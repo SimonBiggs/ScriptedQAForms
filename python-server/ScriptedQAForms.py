@@ -15,7 +15,7 @@
 
 import sys
 import os
-import webbrowser
+import socket
 
 import tornado.web
 from traitlets import Unicode
@@ -34,6 +34,15 @@ class Angular(IPythonHandler):
 class ScriptedForms(NotebookApp):
 
     default_url = Unicode('/forms/')
+    
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(('8.8.8.8', 1))
+        ip = s.getsockname()[0]
+    except:
+        ip = socket.gethostbyname(socket.gethostname())
+    
+    port = 5000
 
     def start(self):    
         dev_mode_string = os.getenv('DEVMODE')
